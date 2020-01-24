@@ -71,6 +71,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.domain.user.model.UserInfo;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.SingleSessionManager;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
@@ -91,7 +92,7 @@ import com.owncloud.android.lib.common.operations.RemoteOperation;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult;
 import com.owncloud.android.lib.common.operations.RemoteOperationResult.ResultCode;
 import com.owncloud.android.lib.resources.status.OwnCloudVersion;
-import com.owncloud.android.lib.resources.users.GetRemoteUserInfoOperation.UserInfo;
+import com.owncloud.android.lib.resources.users.RemoteUserInfo;
 import com.owncloud.android.operations.AuthenticationMethod;
 import com.owncloud.android.operations.GetServerInfoOperation;
 import com.owncloud.android.services.OperationsService;
@@ -1340,7 +1341,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             Timber.d("Successful access - time to save the account");
 
             boolean success = false;
-            String username = ((RemoteOperationResult<UserInfo>) result).getData().mId;
+            String username = ((RemoteOperationResult<RemoteUserInfo>) result).getData().getId();
 
             if (mAction == ACTION_CREATE) {
 
@@ -1488,7 +1489,7 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
                 try {
                     UserInfo userInfo = authResult.getData();
                     mAccountMgr.setUserData(
-                            mAccount, Constants.KEY_DISPLAY_NAME, userInfo.mDisplayName
+                            mAccount, Constants.KEY_DISPLAY_NAME, userInfo.getDisplayName()
                     );
                 } catch (ClassCastException c) {
                     Timber.w("Couldn't get display name for %s", username);
