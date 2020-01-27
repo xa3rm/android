@@ -71,6 +71,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.domain.server.model.ServerInfo;
 import com.owncloud.android.domain.user.model.UserInfo;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.SingleSessionManager;
@@ -95,6 +96,7 @@ import com.owncloud.android.lib.resources.status.OwnCloudVersion;
 import com.owncloud.android.lib.resources.users.RemoteUserInfo;
 import com.owncloud.android.operations.AuthenticationMethod;
 import com.owncloud.android.operations.GetServerInfoOperation;
+import com.owncloud.android.operations.common.UseCaseHelper;
 import com.owncloud.android.services.OperationsService;
 import com.owncloud.android.services.OperationsService.OperationsServiceBinder;
 import com.owncloud.android.ui.dialog.LoadingDialog;
@@ -886,6 +888,8 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             } else {
                 Timber.e("Server check tried with OperationService unbound!");
             }
+            //UseCaseHelper useCaseHelper = new UseCaseHelper();
+            //Timber.d("Server info: " + useCaseHelper.getServerInfo(uri).toString());
 
         } else {
             mServerStatusText = "";
