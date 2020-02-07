@@ -329,8 +329,8 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         );
 
         AuthorizationServiceConfiguration serviceConfiguration = new AuthorizationServiceConfiguration(
-                Uri.parse("https://oidc-workshop.owncloud-demo.com/signin/v1/identifier/_/authorize"), // auth endpoint
-                Uri.parse("https://oidc-workshop.owncloud-demo.com/konnect/v1/token") // token endpoint
+                Uri.parse("auth_endpoint"), // auth endpoint
+                Uri.parse("token_endpoint") // token endpoint
         );
 
         String scope = accountManager.getUserData(
@@ -349,7 +349,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         ClientAuthentication clientAuth = new ClientSecretBasic(mContext.getString(R.string.oauth2_client_secret));
 
         AppAuthConfiguration.Builder appAuthConfigurationBuilder = new AppAuthConfiguration.Builder();
-        appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder());
+        appAuthConfigurationBuilder.setConnectionBuilder(new OAuthConnectionBuilder(mContext));
         AuthorizationService authService = new AuthorizationService(mContext, appAuthConfigurationBuilder.build());
 
         // Let's perform the token request
