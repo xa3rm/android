@@ -874,8 +874,6 @@ public class AuthenticatorActivity extends AccountAuthenticatorActivity
             } else {
                 Timber.e("Server check tried with OperationService unbound!");
             }
-            //UseCaseHelper useCaseHelper = new UseCaseHelper();
-            //Timber.d("Server info: " + useCaseHelper.getServerInfo(uri).toString());
 
         } else {
             mServerStatusText = "";
