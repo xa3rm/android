@@ -36,6 +36,7 @@ import android.widget.Toast;
 
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
+import com.owncloud.android.authentication.oauth.AuthStateManager;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
 import com.owncloud.android.lib.common.authentication.oauth.OAuthConnectionBuilder;
@@ -323,15 +324,14 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         Timber.d("Get OAuth2 refresh token from account: %s, to exchange it for new access and refresh tokens",
                 refreshToken);
 
-        String baseUrl = accountManager.getUserData(
-                account,
-                AccountUtils.Constants.KEY_OC_BASE_URL
-        );
+        AuthStateManager authStateManager = AuthStateManager.getInstance(mContext);
+        AuthorizationServiceConfiguration authorizationServiceConfiguration = authStateManager.getCurrent().
+                getAuthorizationServiceConfiguration();
 
-        AuthorizationServiceConfiguration serviceConfiguration = new AuthorizationServiceConfiguration(
-                Uri.parse("auth_endpoint"), // auth endpoint
-                Uri.parse("token_endpoint") // token endpoint
-        );
+        if (authorizationServiceConfiguration == null) {
+            Timber.d("No authorization configuration found for invalid token refresh");
+            return;
+        }
 
         String scope = accountManager.getUserData(
                 account,
@@ -339,7 +339,7 @@ public class AccountAuthenticator extends AbstractAccountAuthenticator {
         );
 
         TokenRequest tokenRequest = new TokenRequest.Builder(
-                serviceConfiguration,
+                authorizationServiceConfiguration,
                 mContext.getString(R.string.oauth2_client_id))
                 .setGrantType(GrantTypeValues.REFRESH_TOKEN)
                 .setScope(scope)
